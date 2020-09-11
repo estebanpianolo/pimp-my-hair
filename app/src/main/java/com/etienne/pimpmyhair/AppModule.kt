@@ -2,6 +2,9 @@ package com.etienne.pimpmyhair
 
 import android.app.Application
 import android.content.Context
+import com.etienne.pimpmyhair.data.ResultHistoryRetriever
+import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
+import com.etienne.pimpmyhair.domain.ResultHistoryRepository
 import dagger.Module
 import dagger.Provides
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -20,29 +23,30 @@ class AppModule(application: Application) {
     @Provides
     @ApplicationScope
     @ApplicationContext
-    internal fun provideApplicationContext(): Context {
-        return context
-    }
+    internal fun provideApplicationContext(): Context = context
 
     @ApplicationScope
     @IOScheduler
     @Provides
-    fun provideRxIoScheduler(): Scheduler {
-        return Schedulers.io()
-    }
+    fun provideRxIoScheduler(): Scheduler = Schedulers.io()
 
     @ApplicationScope
     @MainScheduler
     @Provides
-    fun provideRxMainScheduler(): Scheduler {
-        return AndroidSchedulers.mainThread()
-    }
+    fun provideRxMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
     
     @Provides
     @ApplicationScope
-    fun provideAppInjector(appComponent: AppComponent): AppInjector {
-        return AppInjectorImpl(appComponent)
-    }
+    fun provideAppInjector(appComponent: AppComponent): AppInjector = AppInjectorImpl(appComponent)
+
+    @Provides
+    @ApplicationScope
+    fun provideResultHistoryRepository(): ResultHistoryRepository = ResultHistoryRetriever()
+
+    @Provides
+    @ApplicationScope
+    fun provideResultHistoryInteractor(repository: ResultHistoryRepository): ResultHistoryInteractor =
+        ResultHistoryInteractor(repository)
 }
 
 @Scope

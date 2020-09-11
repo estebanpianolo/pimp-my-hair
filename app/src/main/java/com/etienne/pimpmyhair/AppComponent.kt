@@ -1,6 +1,7 @@
 package com.etienne.pimpmyhair
 
 import android.content.Context
+import com.etienne.pimpmyhair.main.MainComponent
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import io.reactivex.rxjava3.core.Scheduler
@@ -29,6 +30,8 @@ interface AppComponent {
     fun provideAppInjector(): AppInjector
 
     fun inject(app: App)
+
+    fun plus(module: MainComponent.Module): MainComponent
 }
 
 @Qualifier

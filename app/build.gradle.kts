@@ -66,6 +66,7 @@ dependencies {
     implementation(Dependencies.Dagger.android)
 
     implementation(project(":libraries:archi"))
+    implementation(project(":libraries:pratik"))
 
     testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")

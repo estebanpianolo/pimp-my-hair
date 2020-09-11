@@ -1,7 +1,7 @@
 package com.etienne.pimpmyhair
 
-import android.app.Activity
 import com.etienne.libraries.archi.view.Application
+import com.etienne.pimpmyhair.main.presentation.MainActivity
 import dagger.android.AndroidInjector
 
 import dagger.android.DispatchingAndroidInjector

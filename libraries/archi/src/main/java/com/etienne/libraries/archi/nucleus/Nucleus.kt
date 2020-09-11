@@ -1,5 +1,6 @@
 package com.etienne.libraries.archi.nucleus
 
+import android.util.Log
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
