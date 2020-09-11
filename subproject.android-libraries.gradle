@@ -1,0 +1,34 @@
+subprojects {
+  afterEvaluate { project ->
+    pluginManager.withPlugin("com.android.library") {
+
+      pluginManager.apply("de.mannodermaus.android-junit5")
+
+      android {
+        compileSdkVersion Versions.androidCompileSDK
+        buildToolsVersion Versions.androidBuildTools
+
+        compileOptions {
+          sourceCompatibility JavaVersion.VERSION_1_8
+          targetCompatibility JavaVersion.VERSION_1_8
+        }
+
+        defaultConfig {
+          minSdkVersion Versions.androidMinSDK
+          targetSdkVersion Versions.androidTargetSDK
+          testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        }
+
+        buildTypes {
+          QA {
+            debuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+            testCoverageEnabled true
+            signingConfig signingConfigs.debug
+          }
+        }
+      }
+    }
+  }
+}
