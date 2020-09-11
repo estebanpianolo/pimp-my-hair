@@ -65,6 +65,8 @@ dependencies {
     implementation(Dependencies.Dagger.dagger)
     implementation(Dependencies.Dagger.android)
 
+    implementation("com.jakewharton.rxbinding4:rxbinding:4.0.0")
+
     implementation(project(":libraries:archi"))
     implementation(project(":libraries:pratik"))
 
