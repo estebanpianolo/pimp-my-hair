@@ -57,7 +57,17 @@ dependencies {
     implementation(Dependencies.material)
     implementation(Dependencies.constraintLayout)
 
-    testImplementation("junit:junit:4.+")
+    implementation(Dependencies.Rx.java)
+    implementation(Dependencies.Rx.android)
+    implementation(Dependencies.Rx.kotlin)
+
+    kapt(Dependencies.Dagger.compiler)
+    implementation(Dependencies.Dagger.dagger)
+    implementation(Dependencies.Dagger.android)
+
+    implementation(project(":libraries:archi"))
+
+    testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }

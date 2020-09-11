@@ -17,6 +17,10 @@ object Versions {
         const val material = "1.2.0"
         const val recyclerView = "1.2.0"
     }
+
+    const val rx = "3.0.0"
+
+    const val dagger = "2.29.1"
 }
 
 object Dependencies {
@@ -27,5 +31,17 @@ object Dependencies {
     const val appCompat = "androidx.appcompat:appcompat:${Versions.AndroidX.appCompat}"
     const val material = "com.google.android.material:material:${Versions.AndroidX.material}"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.AndroidX.constraintLayout}"
+
+    object Rx {
+        const val java = "io.reactivex.rxjava3:rxjava:${Versions.rx}"
+        const val android = "io.reactivex.rxjava3:rxandroid:${Versions.rx}"
+        const val kotlin = "io.reactivex.rxjava3:rxkotlin:${Versions.rx}"
+    }
+
+    object Dagger {
+        const val compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
+        const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
+        const val android = "com.google.dagger:dagger-android:${Versions.dagger}"
+    }
 }
 

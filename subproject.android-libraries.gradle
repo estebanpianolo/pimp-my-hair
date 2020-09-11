@@ -1,34 +1,29 @@
 subprojects {
-  afterEvaluate { project ->
-    pluginManager.withPlugin("com.android.library") {
+    afterEvaluate { project ->
+        pluginManager.withPlugin("com.android.library") {
 
-      pluginManager.apply("de.mannodermaus.android-junit5")
+            android {
+                compileSdkVersion Versions.androidCompileSDK
+                buildToolsVersion Versions.androidBuildTools
 
-      android {
-        compileSdkVersion Versions.androidCompileSDK
-        buildToolsVersion Versions.androidBuildTools
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
 
-        compileOptions {
-          sourceCompatibility JavaVersion.VERSION_1_8
-          targetCompatibility JavaVersion.VERSION_1_8
+                defaultConfig {
+                    minSdkVersion Versions.androidMinSDK
+                    targetSdkVersion Versions.androidTargetSDK
+                    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+                }
+            }
+
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
+                testImplementation 'junit:junit:4.13'
+                androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+                androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+            }
         }
-
-        defaultConfig {
-          minSdkVersion Versions.androidMinSDK
-          targetSdkVersion Versions.androidTargetSDK
-          testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        }
-
-        buildTypes {
-          QA {
-            debuggable true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
-            testCoverageEnabled true
-            signingConfig signingConfigs.debug
-          }
-        }
-      }
     }
-  }
 }
