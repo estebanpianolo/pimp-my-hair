@@ -5,8 +5,8 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Versions.androidCompileSDK)
-    buildToolsVersion(Versions.androidBuildTools)
+    compileSdkVersion(Values.androidCompileSDK)
+    buildToolsVersion(Values.androidBuildTools)
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -16,10 +16,10 @@ android {
     defaultConfig {
         applicationId = "com.etienne.pimpmyhair"
 
-        versionCode = Versions.androidVersionCode
-        versionName = Versions.androidVersionName
-        minSdkVersion(Versions.androidMinSDK)
-        targetSdkVersion(Versions.androidTargetSDK)
+        versionCode = Values.androidVersionCode
+        versionName = Values.androidVersionName
+        minSdkVersion(Values.androidMinSDK)
+        targetSdkVersion(Values.androidTargetSDK)
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -28,8 +28,8 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
         getByName("debug") {
@@ -65,10 +65,14 @@ dependencies {
     implementation(Dependencies.Dagger.dagger)
     implementation(Dependencies.Dagger.android)
 
-    implementation("com.jakewharton.rxbinding4:rxbinding:4.0.0")
+    implementation(Dependencies.rxBinding)
+
+    implementation(Dependencies.Retrofit.retrofit)
+    implementation(Dependencies.gson)
 
     implementation(project(":libraries:archi"))
     implementation(project(":libraries:pratik"))
+    implementation(project(":libraries:network"))
 
     testImplementation("junit:junit:4.13")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")

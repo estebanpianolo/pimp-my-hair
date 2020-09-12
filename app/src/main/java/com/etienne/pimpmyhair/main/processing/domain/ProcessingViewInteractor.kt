@@ -4,22 +4,26 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.provider.MediaStore
-import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
-import com.etienne.libraries.archi.nucleus.*
+import com.etienne.libraries.archi.nucleus.Action
+import com.etienne.libraries.archi.nucleus.NucleusInteractorImpl
+import com.etienne.libraries.archi.nucleus.NucleusReducerConfigurator
+import com.etienne.libraries.archi.nucleus.simpleCommand
+import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.main.presentation.ApplicationState
 import com.etienne.pimpmyhair.main.processing.domain.PhotoLibraryLauncher.Companion.PhotoLibraryRequestCode
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.core.Single
-import java.io.ByteArrayOutputStream
 
 
 class ProcessingViewInteractor(
     private val applicationState: ApplicationState,
     private val photoLibraryLauncher: PhotoLibraryLauncher,
+    private val resultHistoryInteractor: ResultHistoryInteractor,
     private val contentResolver: ContentResolver,
-    private val computationScheduler: Scheduler
+    private val processingRepository: ProcessingRepository,
+    private val computationScheduler: Scheduler,
+    private val ioScheduler: Scheduler,
+    private val mainScheduler: Scheduler
 ) :
     NucleusInteractorImpl<ProcessingState>(ProcessingState.Idle) {
     override val reducerConfigurator: NucleusReducerConfigurator<ProcessingState> = {
@@ -31,7 +35,7 @@ class ProcessingViewInteractor(
         }
         PhotoPickedUp::class changesBoth {
             Pair(
-                ProcessingState.FormattingData(it.imageUri),
+                ProcessingState.FormattingData,
                 FormatData(it.imageUri, contentResolver, computationScheduler)
             )
         }
@@ -45,8 +49,26 @@ class ProcessingViewInteractor(
         }
         DataFormatted::class changesBoth {
             Pair(
-                ProcessingState.SendingData(it.bitmap),
-                SendData(it.encodedImage)
+                ProcessingState.SendingData,
+                SendData(it.bitmap, it.encodedImage, processingRepository, ioScheduler)
+            )
+        }
+        ResultReceived::class changesBoth {
+            Pair(
+                ProcessingState.FormattingResult,
+                FormatResult(it.bitmap, it.encodedResult, computationScheduler)
+            )
+        }
+        ResultFormatted::class changesBoth {
+            Pair(
+                ProcessingState.Idle,
+                PublishResult(
+                    it.originalImage,
+                    it.resultImage,
+                    applicationState,
+                    resultHistoryInteractor,
+                    mainScheduler
+                )
             )
         }
     }
@@ -66,46 +88,11 @@ class ProcessingViewInteractor(
     }
 }
 
-class OpenPhotoLibrary(
-    private val photoLibraryLauncher: PhotoLibraryLauncher,
-    private val photoLibraryRequestCode: Int
-) :
-    Command {
-    override fun execute(): Single<Action> {
-        return Single.fromCallable {
-            photoLibraryLauncher.showPhotoLibrary(photoLibraryRequestCode)
-            DoNothing
-        }
-    }
-}
-
-
-class FormatData(
-    private val imageUri: Uri,
-    private val contentResolver: ContentResolver,
-    private val computationScheduler: Scheduler
-) :
-    Command {
-    override fun execute(): Single<Action> = Single.fromCallable {
-        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-        DataFormatted(
-            Base64.encodeToString(
-                ByteArrayOutputStream().run {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, this)
-                    toByteArray()
-                }, Base64.DEFAULT
-            ),
-            bitmap
-        ) as Action
-    }.subscribeOn(computationScheduler)
-
-}
-
 sealed class ProcessingState {
     object PickingPhoto : ProcessingState()
-    data class FormattingData(val imageUri: Uri) : ProcessingState()
-    data class SendingData(val image: Bitmap) : ProcessingState()
-    data class FormattingResult(val image: Bitmap) : ProcessingState()
+    object FormattingData : ProcessingState()
+    object SendingData : ProcessingState()
+    object FormattingResult : ProcessingState()
     object Idle : ProcessingState()
 }
 
@@ -113,8 +100,9 @@ object PickPhoto : Action
 data class PhotoPickedUp(val imageUri: Uri) : Action
 object NoPhotoPickedUp : Action
 data class DataFormatted(val encodedImage: String, val bitmap: Bitmap) : Action
-data class ResultReceived(val encodedResult: String) : Action
-data class ResultFormatted(val resultImage: Bitmap) : Action
+data class ResultReceived(val bitmap: Bitmap, val encodedResult: String) : Action
+data class ResultFormatted(val originalImage: Bitmap, val resultImage: Bitmap) : Action
+object ProcessingError : Action
 
 interface PhotoLibraryLauncher {
     fun showPhotoLibrary(requestCode: Int)

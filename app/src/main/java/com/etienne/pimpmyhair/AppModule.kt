@@ -2,6 +2,7 @@ package com.etienne.pimpmyhair
 
 import android.app.Application
 import android.content.Context
+import com.etienne.libraries.network.NetworkConnector
 import com.etienne.pimpmyhair.data.ResultHistoryRetriever
 import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.domain.ResultHistoryRepository
@@ -34,7 +35,7 @@ class AppModule(application: Application) {
     @MainScheduler
     @Provides
     fun provideRxMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
-    
+
     @ApplicationScope
     @ComputationScheduler
     @Provides
@@ -52,6 +53,11 @@ class AppModule(application: Application) {
     @ApplicationScope
     fun provideResultHistoryInteractor(repository: ResultHistoryRepository): ResultHistoryInteractor =
         ResultHistoryInteractor(repository)
+
+    @Provides
+    @ApplicationScope
+    fun provideNetworkConnector(): NetworkConnector =
+        NetworkConnector.createNewConnector("https://interview.photoroom.com")
 }
 
 @Scope

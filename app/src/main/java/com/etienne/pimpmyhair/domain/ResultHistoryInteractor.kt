@@ -8,6 +8,8 @@ class ResultHistoryInteractor(repository: ResultHistoryRepository) :
     NucleusInteractorImpl<ResultHistoryState>(
         repository.getHistory().map { ResultHistoryState(history = it) }) {
 
+    fun addResult(result: Result) = actions.onNext(AddResult(result))
+
     override val reducerConfigurator: NucleusReducerConfigurator<ResultHistoryState> = {
         AddResult::class changesState {
             copy(history = history + it.result)

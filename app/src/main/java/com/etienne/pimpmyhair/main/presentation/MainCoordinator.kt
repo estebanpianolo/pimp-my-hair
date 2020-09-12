@@ -2,6 +2,7 @@ package com.etienne.pimpmyhair.main.presentation
 
 import android.view.ViewGroup
 import com.etienne.libraries.archi.coordinator.Coordinator
+import com.etienne.pimpmyhair.domain.Result
 import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.main.MainComponent
 import com.etienne.pimpmyhair.main.empty.EmptyViewComponent
@@ -56,6 +57,10 @@ class MainCoordinator(
         detachCoordinator(ProcessingViewCoordinator::class)
     }
 
+    override fun showResultScreen(result: Result) {
+
+    }
+
     private fun registerForHistoryUpdates() {
         resultHistoryInteractor.state.map { it.history.count() > 0 }
             .subscribe {
@@ -72,4 +77,5 @@ class MainCoordinator(
 interface ApplicationState {
     fun showProcessingScreen()
     fun hideProcessingScreen()
+    fun showResultScreen(result: Result)
 }

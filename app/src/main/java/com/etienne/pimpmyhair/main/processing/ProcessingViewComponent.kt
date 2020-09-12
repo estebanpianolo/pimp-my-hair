@@ -2,9 +2,16 @@ package com.etienne.pimpmyhair.main.processing
 
 import android.content.ContentResolver
 import android.view.ViewGroup
+import com.etienne.libraries.network.NetworkConnector
 import com.etienne.pimpmyhair.ComputationScheduler
+import com.etienne.pimpmyhair.IOScheduler
+import com.etienne.pimpmyhair.MainScheduler
+import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.main.presentation.ApplicationState
+import com.etienne.pimpmyhair.main.processing.data.ProcessingApi
+import com.etienne.pimpmyhair.main.processing.data.ProcessingRepositoryImpl
 import com.etienne.pimpmyhair.main.processing.domain.PhotoLibraryLauncher
+import com.etienne.pimpmyhair.main.processing.domain.ProcessingRepository
 import com.etienne.pimpmyhair.main.processing.domain.ProcessingViewInteractor
 import com.etienne.pimpmyhair.main.processing.presentation.ProcessingViewCoordinator
 import com.etienne.pimpmyhair.main.processing.presentation.ProcessingViewHolder
@@ -41,20 +48,33 @@ interface ProcessingViewComponent {
         internal fun provideInteractor(
             applicationState: ApplicationState,
             photoLibraryLauncher: PhotoLibraryLauncher,
+            resultHistoryInteractor: ResultHistoryInteractor,
             contentResolver: ContentResolver,
+            processingRepository: ProcessingRepository,
             @ComputationScheduler computationScheduler: Scheduler,
+            @IOScheduler ioScheduler: Scheduler,
+            @MainScheduler mainScheduler: Scheduler
         ): ProcessingViewInteractor =
             ProcessingViewInteractor(
                 applicationState,
                 photoLibraryLauncher,
+                resultHistoryInteractor,
                 contentResolver,
-                computationScheduler
+                processingRepository,
+                computationScheduler,
+                ioScheduler,
+                mainScheduler
             )
 
         @Provides
         @ProcessingViewScope
         internal fun provideViewHolder(interactor: ProcessingViewInteractor): ProcessingViewHolder =
             ProcessingViewHolder(container, interactor)
+
+        @Provides
+        @ProcessingViewScope
+        internal fun provideProcessingRepository(networkConnector: NetworkConnector): ProcessingRepository =
+            ProcessingRepositoryImpl(networkConnector.create(ProcessingApi::class.java))
     }
 }
 
