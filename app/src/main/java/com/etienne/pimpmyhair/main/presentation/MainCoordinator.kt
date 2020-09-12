@@ -8,6 +8,7 @@ import com.etienne.pimpmyhair.main.MainComponent
 import com.etienne.pimpmyhair.main.empty.EmptyViewComponent
 import com.etienne.pimpmyhair.main.processing.ProcessingViewComponent
 import com.etienne.pimpmyhair.main.processing.presentation.ProcessingViewCoordinator
+import com.etienne.pimpmyhair.main.result.ResultViewComponent
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 
@@ -17,6 +18,7 @@ class MainCoordinator(
     private val resultHistoryInteractor: ResultHistoryInteractor,
     private val emptyViewBuilder: EmptyViewComponent.Builder,
     private val processingViewBuilder: ProcessingViewComponent.Builder,
+    private val resultViewBuilder: ResultViewComponent.Builder,
 ) : Coordinator<MainComponent>(component), ApplicationState {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -58,6 +60,13 @@ class MainCoordinator(
     }
 
     override fun showResultScreen(result: Result) {
+        resultViewBuilder.module(ResultViewComponent.Module(parent, result))
+            .build()
+            .coordinator()
+            .apply {
+                start()
+                this@MainCoordinator.attachCoordinator(this)
+            }
 
     }
 

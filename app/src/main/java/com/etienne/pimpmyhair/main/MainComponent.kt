@@ -9,6 +9,7 @@ import com.etienne.pimpmyhair.main.presentation.MainActivity
 import com.etienne.pimpmyhair.main.presentation.MainCoordinator
 import com.etienne.pimpmyhair.main.processing.ProcessingViewComponent
 import com.etienne.pimpmyhair.main.processing.domain.PhotoLibraryLauncher
+import com.etienne.pimpmyhair.main.result.ResultViewComponent
 import dagger.Provides
 import dagger.Subcomponent
 import javax.inject.Scope
@@ -21,7 +22,8 @@ interface MainComponent {
     @dagger.Module(
         subcomponents = [
             EmptyViewComponent::class,
-            ProcessingViewComponent::class
+            ProcessingViewComponent::class,
+            ResultViewComponent::class
         ]
     )
     class Module(
@@ -36,14 +38,16 @@ interface MainComponent {
             component: MainComponent,
             resultHistoryInteractor: ResultHistoryInteractor,
             emptyViewBuilder: EmptyViewComponent.Builder,
-            processingViewBuilder: ProcessingViewComponent.Builder
+            processingViewBuilder: ProcessingViewComponent.Builder,
+            resultViewBuilder: ResultViewComponent.Builder
         ): MainCoordinator =
             MainCoordinator(
                 parent,
                 component,
                 resultHistoryInteractor,
                 emptyViewBuilder,
-                processingViewBuilder
+                processingViewBuilder,
+                resultViewBuilder
             )
 
         @Provides
