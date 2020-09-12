@@ -5,6 +5,8 @@ import com.etienne.libraries.archi.coordinator.Coordinator
 import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.main.MainComponent
 import com.etienne.pimpmyhair.main.empty.EmptyViewComponent
+import com.etienne.pimpmyhair.main.processing.ProcessingViewComponent
+import com.etienne.pimpmyhair.main.processing.presentation.ProcessingViewCoordinator
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 
@@ -13,6 +15,7 @@ class MainCoordinator(
     component: MainComponent,
     private val resultHistoryInteractor: ResultHistoryInteractor,
     private val emptyViewBuilder: EmptyViewComponent.Builder,
+    private val processingViewBuilder: ProcessingViewComponent.Builder,
 ) : Coordinator<MainComponent>(component), ApplicationState {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -39,7 +42,18 @@ class MainCoordinator(
     }
 
     override fun showProcessingScreen() {
+        processingViewBuilder.module(ProcessingViewComponent.Module(parent))
+            .build()
+            .coordinator()
+            .apply {
+                start()
+                this@MainCoordinator.attachCoordinator(this)
+            }
 
+    }
+
+    override fun hideProcessingScreen() {
+        detachCoordinator(ProcessingViewCoordinator::class)
     }
 
     private fun registerForHistoryUpdates() {
@@ -57,4 +71,5 @@ class MainCoordinator(
 
 interface ApplicationState {
     fun showProcessingScreen()
+    fun hideProcessingScreen()
 }

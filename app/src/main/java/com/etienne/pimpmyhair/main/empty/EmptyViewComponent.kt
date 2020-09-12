@@ -27,15 +27,18 @@ interface EmptyViewComponent {
     class Module(private val container: ViewGroup) {
 
         @Provides
+        @EmptyViewScope
         internal fun provideCoordinator(
             component: EmptyViewComponent,
         ): EmptyViewCoordinator = EmptyViewCoordinator(component)
 
         @Provides
+        @EmptyViewScope
         internal fun provideInteractor(applicationState: ApplicationState): EmptyViewInteractor =
             EmptyViewInteractor(applicationState)
 
         @Provides
+        @EmptyViewScope
         internal fun provideViewHolder(interactor: EmptyViewInteractor): EmptyViewHolder =
             EmptyViewHolder(container, interactor)
     }

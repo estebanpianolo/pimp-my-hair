@@ -47,9 +47,11 @@ abstract class NucleusViewHolder<V : View, S> : ViewHolder<V> {
             .subscribe { modelWatcher(it) }
             .addTo(this)
 
-        Observable
-            .mergeArray(*dispatcher.toTypedArray())
-            .relay(interactor.actions)
-            .addTo(this)
+        if (dispatcher.isNotEmpty()) {
+            Observable
+                .mergeArray(*dispatcher.toTypedArray())
+                .relay(interactor.actions)
+                .addTo(this)
+        }
     }
 }

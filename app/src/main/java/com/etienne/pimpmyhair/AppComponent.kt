@@ -27,6 +27,9 @@ interface AppComponent {
     @get:IOScheduler
     val ioScheduler: Scheduler
 
+    @get:ComputationScheduler
+    val computationScheduler: Scheduler
+
     fun provideAppInjector(): AppInjector
 
     fun inject(app: App)
@@ -48,3 +51,8 @@ annotation class MainScheduler
 @kotlin.annotation.MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 annotation class IOScheduler
+
+@Qualifier
+@kotlin.annotation.MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ComputationScheduler

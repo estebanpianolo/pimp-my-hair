@@ -99,9 +99,6 @@ class Nucleus<S>(
     fun clear() {
         disposables.clear()
     }
-    companion object {
-        object DoNothing : InternalAction
-    }
 }
 
 class AlreadyStartedException : IllegalStateException("Start function already called")

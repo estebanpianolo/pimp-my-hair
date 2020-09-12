@@ -1,6 +1,6 @@
 package com.etienne.libraries.archi.coordinator
 
-import android.content.pm.PackageManager
+import android.content.Intent
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -17,17 +17,36 @@ abstract class Coordinator<C>(protected val component: C) {
     abstract fun onRelease()
 
     /**
-     * This method dispatches the back event to his last child to know if it handles the back event.
+     * This method dispatches the back event to its last child to know if it handles the back event.
      * If not, the method checks if this coordinator handles the event.
      * If not, it returns False and the parent coordinator will try to handle it.
      *
      * @return Boolean : True if this method handled the back event otherwise False
      */
     fun backPressed(): Boolean {
-        val activeChildBack = childrenStack.peek()?.backPressed() ?: false
-        if (!activeChildBack)
+        val activeChild = childrenStack.peek()?.backPressed() ?: false
+        if (!activeChild)
             return ((this is BackPressedListener) && onBackPressed())
-        return activeChildBack
+        return activeChild
+    }
+
+    /**
+     * This method dispatches onActivityResult to its last child to know if it handles the event.
+     * If not, the method checks if this coordinator handles the event.
+     * If not, it returns False and the parent coordinator will try to handle it.
+     *
+     * @return Boolean : True if this method handled the event otherwise False
+     */
+    fun activityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        val activeChild =
+            childrenStack.peek()?.activityResult(requestCode, resultCode, data) ?: false
+        if (!activeChild)
+            return ((this is ActivityResultHandler) && onActivityResult(
+                requestCode,
+                resultCode,
+                data
+            ))
+        return activeChild
     }
 
     /**
@@ -79,6 +98,8 @@ abstract class Coordinator<C>(protected val component: C) {
     fun attachTo(coordinator: Coordinator<*>) {
         coordinator.attachCoordinator(this)
     }
+
+
 }
 
 /**
@@ -95,3 +116,17 @@ interface BackPressedListener {
      */
     fun onBackPressed(): Boolean
 }
+
+/**
+ * This interface must be implemented by coordinator that wants to handle onActivityResult.
+ */
+interface ActivityResultHandler {
+    /**
+     * This method must return True whe this method did something or False if nothing
+     * has to be done by the coordinator (basically it means all children coordinators are already detached)
+     *
+     * @return True if this method handled the back event otherwise False
+     */
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean
+}
+

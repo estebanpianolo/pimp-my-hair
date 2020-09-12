@@ -35,6 +35,11 @@ class AppModule(application: Application) {
     @Provides
     fun provideRxMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
     
+    @ApplicationScope
+    @ComputationScheduler
+    @Provides
+    fun provideRxComputationScheduler(): Scheduler = Schedulers.computation()
+
     @Provides
     @ApplicationScope
     fun provideAppInjector(appComponent: AppComponent): AppInjector = AppInjectorImpl(appComponent)
