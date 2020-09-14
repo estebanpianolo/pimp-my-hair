@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="history_image_size">112dp</dimen>
+    <dimen name="theme_margin">8dp</dimen>
+    <dimen name="theme_margin_double">16dp</dimen>
+</resources>

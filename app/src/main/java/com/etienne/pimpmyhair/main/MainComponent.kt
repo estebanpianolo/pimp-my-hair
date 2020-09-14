@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.view.ViewGroup
 import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.main.empty.EmptyViewComponent
+import com.etienne.pimpmyhair.main.history.HistoryViewComponent
 import com.etienne.pimpmyhair.main.presentation.ApplicationState
 import com.etienne.pimpmyhair.main.presentation.MainActivity
 import com.etienne.pimpmyhair.main.presentation.MainCoordinator
@@ -23,7 +24,8 @@ interface MainComponent {
         subcomponents = [
             EmptyViewComponent::class,
             ProcessingViewComponent::class,
-            ResultViewComponent::class
+            ResultViewComponent::class,
+            HistoryViewComponent::class
         ]
     )
     class Module(
@@ -39,7 +41,8 @@ interface MainComponent {
             resultHistoryInteractor: ResultHistoryInteractor,
             emptyViewBuilder: EmptyViewComponent.Builder,
             processingViewBuilder: ProcessingViewComponent.Builder,
-            resultViewBuilder: ResultViewComponent.Builder
+            resultViewBuilder: ResultViewComponent.Builder,
+            historyViewBuilder: HistoryViewComponent.Builder
         ): MainCoordinator =
             MainCoordinator(
                 parent,
@@ -47,7 +50,8 @@ interface MainComponent {
                 resultHistoryInteractor,
                 emptyViewBuilder,
                 processingViewBuilder,
-                resultViewBuilder
+                resultViewBuilder,
+                historyViewBuilder
             )
 
         @Provides

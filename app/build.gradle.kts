@@ -61,12 +61,14 @@ dependencies {
     implementation(Dependencies.Rx.java)
     implementation(Dependencies.Rx.android)
     implementation(Dependencies.Rx.kotlin)
+    implementation("androidx.appcompat:appcompat:1.2.0")
 
     kapt(Dependencies.Dagger.compiler)
     implementation(Dependencies.Dagger.dagger)
     implementation(Dependencies.Dagger.android)
 
-    implementation(Dependencies.rxBinding)
+    implementation(Dependencies.RxBinding.base)
+    implementation(Dependencies.RxBinding.appCompat)
 
     implementation(Dependencies.Retrofit.retrofit)
     implementation(Dependencies.gson)

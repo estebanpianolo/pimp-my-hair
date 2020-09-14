@@ -1,9 +1,9 @@
-package com.etienne.pimpmyhair.main.result.presentation
+package com.etienne.pimpmyhair.main.history.presentation
 
 import com.etienne.libraries.archi.coordinator.Coordinator
-import com.etienne.pimpmyhair.main.result.ResultViewComponent
+import com.etienne.pimpmyhair.main.history.HistoryViewComponent
 
-class ResultViewCoordinator(component: ResultViewComponent) : Coordinator<ResultViewComponent>(component){
+class HistoryViewCoordinator(component: HistoryViewComponent) : Coordinator<HistoryViewComponent>(component){
     override fun start() {
         component.viewHolder().addOnRootView()
     }

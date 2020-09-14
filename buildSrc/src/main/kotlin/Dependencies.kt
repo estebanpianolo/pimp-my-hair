@@ -57,7 +57,11 @@ object Dependencies {
         const val android = "com.google.dagger:dagger-android:${DependencyVersions.dagger}"
     }
 
-    const val rxBinding = "com.jakewharton.rxbinding4:rxbinding:${DependencyVersions.rxBinding}"
+    object RxBinding {
+        const val base = "com.jakewharton.rxbinding4:rxbinding:${DependencyVersions.rxBinding}"
+        const val appCompat =
+            "com.jakewharton.rxbinding4:rxbinding-appcompat:${DependencyVersions.rxBinding}"
+    }
 
     object Retrofit {
         const val retrofit =

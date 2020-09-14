@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Pimp My Hair</string>
+    <string name="menu_history_start_process_title">Add a new photo from your gallery</string>
 </resources>

@@ -2,10 +2,13 @@ package com.etienne.pimpmyhair.main.presentation
 
 import android.view.ViewGroup
 import com.etienne.libraries.archi.coordinator.Coordinator
+import com.etienne.libraries.pratik.compat.Optional
 import com.etienne.pimpmyhair.domain.Result
 import com.etienne.pimpmyhair.domain.ResultHistoryInteractor
 import com.etienne.pimpmyhair.main.MainComponent
 import com.etienne.pimpmyhair.main.empty.EmptyViewComponent
+import com.etienne.pimpmyhair.main.empty.presentation.EmptyViewCoordinator
+import com.etienne.pimpmyhair.main.history.HistoryViewComponent
 import com.etienne.pimpmyhair.main.processing.ProcessingViewComponent
 import com.etienne.pimpmyhair.main.processing.presentation.ProcessingViewCoordinator
 import com.etienne.pimpmyhair.main.result.ResultViewComponent
@@ -19,11 +22,19 @@ class MainCoordinator(
     private val emptyViewBuilder: EmptyViewComponent.Builder,
     private val processingViewBuilder: ProcessingViewComponent.Builder,
     private val resultViewBuilder: ResultViewComponent.Builder,
+    private val historyViewBuilder: HistoryViewComponent.Builder,
 ) : Coordinator<MainComponent>(component), ApplicationState {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun start() {
+        historyViewBuilder.module(HistoryViewComponent.Module(parent))
+            .build()
+            .coordinator()
+            .apply {
+                start()
+                this@MainCoordinator.attachCoordinator(this)
+            }
         registerForHistoryUpdates()
     }
 
@@ -32,6 +43,7 @@ class MainCoordinator(
     }
 
     private fun showHistoryScreen() {
+        detachCoordinator(EmptyViewCoordinator::class)
     }
 
     private fun hideHistory() {
@@ -60,6 +72,8 @@ class MainCoordinator(
     }
 
     override fun showResultScreen(result: Result) {
+        hideProcessingScreen()
+
         resultViewBuilder.module(ResultViewComponent.Module(parent, result))
             .build()
             .coordinator()
@@ -67,7 +81,15 @@ class MainCoordinator(
                 start()
                 this@MainCoordinator.attachCoordinator(this)
             }
+    }
 
+    override fun showResultAt(position: Int) {
+        resultHistoryInteractor.state
+            .take(1)
+            .map { Optional.ofNullable(it.history.getOrNull(position)) }
+            .subscribe {
+                it.ifPresent { showResultScreen(it) }
+            }.addTo(disposables)
     }
 
     private fun registerForHistoryUpdates() {
@@ -87,4 +109,5 @@ interface ApplicationState {
     fun showProcessingScreen()
     fun hideProcessingScreen()
     fun showResultScreen(result: Result)
+    fun showResultAt(position: Int)
 }
