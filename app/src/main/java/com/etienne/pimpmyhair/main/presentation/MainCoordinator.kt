@@ -12,6 +12,7 @@ import com.etienne.pimpmyhair.main.history.HistoryViewComponent
 import com.etienne.pimpmyhair.main.processing.ProcessingViewComponent
 import com.etienne.pimpmyhair.main.processing.presentation.ProcessingViewCoordinator
 import com.etienne.pimpmyhair.main.result.ResultViewComponent
+import com.etienne.pimpmyhair.main.result.presentation.ResultViewCoordinator
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 
@@ -92,6 +93,10 @@ class MainCoordinator(
             }.addTo(disposables)
     }
 
+    override fun hideResultScreen() {
+        detachCoordinator(ResultViewCoordinator::class)
+    }
+
     private fun registerForHistoryUpdates() {
         resultHistoryInteractor.state.map { it.history.count() > 0 }
             .subscribe {
@@ -110,4 +115,5 @@ interface ApplicationState {
     fun hideProcessingScreen()
     fun showResultScreen(result: Result)
     fun showResultAt(position: Int)
+    fun hideResultScreen()
 }

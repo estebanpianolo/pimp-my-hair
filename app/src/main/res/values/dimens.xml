@@ -3,4 +3,6 @@
     <dimen name="history_image_size">112dp</dimen>
     <dimen name="theme_margin">8dp</dimen>
     <dimen name="theme_margin_double">16dp</dimen>
+    <dimen name="theme_margin_quadruple">32dp</dimen>
+    <dimen name="theme_default_icon_size">24dp</dimen>
 </resources>

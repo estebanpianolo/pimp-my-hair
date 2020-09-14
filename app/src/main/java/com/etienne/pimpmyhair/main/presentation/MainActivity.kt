@@ -56,4 +56,11 @@ class MainActivity : RelaunchingActivity(), PhotoLibraryLauncher {
         super.onActivityResult(requestCode, resultCode, data)
         coordinator.activityResult(requestCode, resultCode, data)
     }
+
+    override fun onBackPressed() {
+        if(!coordinator.backPressed()) {
+            super.onBackPressed()
+        }
+
+    }
 }

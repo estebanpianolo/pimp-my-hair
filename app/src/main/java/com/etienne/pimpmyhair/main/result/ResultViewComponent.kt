@@ -2,6 +2,7 @@ package com.etienne.pimpmyhair.main.result
 
 import android.view.ViewGroup
 import com.etienne.pimpmyhair.domain.Result
+import com.etienne.pimpmyhair.main.presentation.ApplicationState
 import com.etienne.pimpmyhair.main.result.domain.ResultViewInteractor
 import com.etienne.pimpmyhair.main.result.presentation.ResultViewCoordinator
 import com.etienne.pimpmyhair.main.result.presentation.ResultViewHolder
@@ -34,8 +35,8 @@ interface ResultViewComponent {
 
         @Provides
         @EmptyViewScope
-        internal fun provideInteractor(): ResultViewInteractor =
-            ResultViewInteractor(result)
+        internal fun provideInteractor(applicationState: ApplicationState): ResultViewInteractor =
+            ResultViewInteractor(result, applicationState)
 
         @Provides
         @EmptyViewScope

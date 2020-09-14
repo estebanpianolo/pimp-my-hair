@@ -13,6 +13,7 @@ import com.etienne.pimpmyhair.main.history.domain.HistoryListState
 import com.etienne.pimpmyhair.main.history.domain.ItemClicked
 import com.etienne.pimpmyhair.main.history.domain.StartNewProcess
 import com.jakewharton.rxbinding4.appcompat.itemClicks
+import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlinx.android.synthetic.main.view_history.view.*
 
 class HistoryViewHolder(rootView: ViewGroup, interactor: NucleusInteractor<HistoryListState>) :
@@ -38,12 +39,10 @@ class HistoryViewHolder(rootView: ViewGroup, interactor: NucleusInteractor<Histo
 
     override fun buildContentView() {
         super.buildContentView()
-        val numberOfColumns =
-            getNumberOfColumns(contentView.resources.getDimension(R.dimen.history_image_size))
         contentView.history_list.apply {
             layoutManager = GridLayoutManager(
                 context,
-                numberOfColumns
+                getNumberOfColumns(contentView.resources.getDimension(R.dimen.history_image_size))
             )
             adapter = viewAdapter
             setHasFixedSize(true)
@@ -51,9 +50,7 @@ class HistoryViewHolder(rootView: ViewGroup, interactor: NucleusInteractor<Histo
         contentView.toolbar.inflateMenu(R.menu.menu_history_view)
     }
 
-    private fun getNumberOfColumns(columnWidth: Float): Int {
-        return context.resources.displayMetrics.run {
-            (widthPixels / columnWidth).toInt()
-        }
+    private fun getNumberOfColumns(columnWidth: Float) = context.resources.displayMetrics.run {
+        (widthPixels / columnWidth).toInt()
     }
 }

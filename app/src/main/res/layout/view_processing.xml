@@ -2,15 +2,40 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/processing_view_background">
+
+    <include layout="@layout/toolbar" />
+
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/progress_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Processing"
+        android:text="@string/processing_view_title"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/progress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginStart="@dimen/theme_margin_double"
+        android:textColor="@color/design_default_color_on_primary"
+        android:layout_marginEnd="@dimen/theme_margin_quadruple"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="@dimen/theme_margin_quadruple"
+        android:layout_height="@dimen/theme_margin_quadruple"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="@id/progress_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/progress_title"
+        app:layout_constraintTop_toTopOf="@id/progress_title"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:indeterminateTint="@color/design_default_color_on_primary"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

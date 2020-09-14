@@ -8,7 +8,10 @@ import com.etienne.libraries.archi.view.ModelWatcherConfigurator
 import com.etienne.libraries.archi.view.NucleusViewHolder
 import com.etienne.libraries.archi.view.dispatch
 import com.etienne.pimpmyhair.R
+import com.etienne.pimpmyhair.main.result.domain.BackPressed
 import com.etienne.pimpmyhair.main.result.domain.ResultViewState
+import com.jakewharton.rxbinding4.appcompat.navigationClicks
+import kotlinx.android.synthetic.main.toolbar.view.*
 import kotlinx.android.synthetic.main.view_result.*
 import kotlinx.android.synthetic.main.view_result.view.*
 
@@ -24,6 +27,11 @@ class ResultViewHolder(rootView: ViewGroup, interactor: NucleusInteractor<Result
     }
 
     override val dispatcher: Dispatcher = dispatch(
-
+        contentView.toolbar.navigationClicks().map { BackPressed }
     )
+
+    override fun buildContentView() {
+        super.buildContentView()
+        contentView.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+    }
 }
